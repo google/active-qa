@@ -1,0 +1,14 @@
+absl-py
+google-apputils
+grpcio
+grpcio-tools
+keras
+nltk
+numpy
+pandas
+portpicker
+pygtrie
+sentencepiece
+tensorflow
+tensorflow-tensorboard
+tqdm

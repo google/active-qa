@@ -1,0 +1,153 @@
+// Copyright 2018 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+////////////////////////////////////////////////////////////////////////////////
+
+// Protocol buffer for the Reformulator. A (meta) agent sends
+// |ReformulatorQuery|s to a reformulator and receives back a |Response| per
+// |ReformulatorQuery|. |ReformulatorQuery| contains a question to be
+// reformulated. The reformulator may be a seq2seq model or a search engine that
+// returns the most similar questions in a database. The |Response| contains
+// |Reformulation|s to the question and the question itself.
+
+syntax = "proto2";
+
+package active_qa;
+
+// Request message for the ReformulatorServer.
+message ReformulatorRequest {
+  message Query {
+    // The question itself.
+    optional string question = 1;
+    repeated string trie_excludes = 2;
+  }
+
+  // The request contains a batch of queries which are handled by the
+  // reformulator.
+  repeated Query queries = 1;
+
+  // Inference type if the reformulator is a generative model.
+  enum InferenceMode {
+    DEFAULT = 0;
+    GREEDY = 1;
+    SAMPLING = 2;
+    BEAM_SEARCH = 3;
+    TRIE_BEAM_SEARCH = 4;
+    TRIE_SAMPLE = 5;
+    TRIE_GREEDY = 6;
+    DIVERSE_BEAM_SEARCH = 7;
+  }
+
+  // Inference mode used when generating reformulations.
+  optional InferenceMode inference_mode = 2 [default = SAMPLING];
+}
+
+// Response message for the ReformulatorServer.
+message ReformulatorResponse {
+  // One response is returned for each Query in ReformulatorRequest.
+  message Response {
+    // Reformulations of the question produced by the reformulator along with
+    // their answers (if looked up from memory).
+    message Reformulation {
+      optional string reformulation = 1;
+      repeated string answers = 2;
+      optional string tokenized_reformulation = 3;
+    }
+    repeated Reformulation reformulations = 1;
+    optional string question = 2;
+  }
+  repeated Response responses = 1;
+  // Number of steps the model has trained.
+  optional int64 global_step = 2;
+}
+
+// Request for supervised training update.
+message TrainingRequest {
+  // Weighted supervised training example.
+  message Example {
+    optional string source = 1;
+    optional string target = 2;
+    optional float weight = 3;
+    optional bool target_is_tokenized = 4;
+  }
+  repeated Example examples = 1;
+}
+
+// Response after receiving training update.
+message TrainingResponse {
+  // The training loss.
+  optional float loss = 1;
+  // The per-example losses after weighting.
+  repeated float per_example_losses = 2;
+  // Number of steps the model has trained.
+  optional int64 global_step = 3;
+}
+
+// Request to save the trie to a file.
+message SaveTrieToFileRequest {
+  optional string file_path = 1;
+}
+
+// Response to save the trie to a file.
+message SaveTrieToFileResponse {
+}
+
+// Request to load the trie from a file.
+message LoadTrieFromFileRequest {
+  optional string file_path = 1;
+}
+
+// Response to load the trie from a file.
+message LoadTrieFromFileResponse {
+}
+
+// Request to update the trie.
+message UpdateTrieRequest {
+  message TrieEntry {
+    optional string question = 1;
+    repeated string answers = 2;
+  }
+
+  repeated TrieEntry entries = 1;
+}
+
+// Response to update the trie.
+message UpdateTrieResponse {
+}
+
+// gRPC service for the reformulator server.
+service ReformulatorServer {
+  // The request contains a list of questions and the response contains a list
+  // of list of reformulations.
+  rpc GetReformulations(ReformulatorRequest) returns (ReformulatorResponse) {
+  }
+
+  // Performs a supervised update of the model, using weighted training
+  // examples.
+  rpc Train(TrainingRequest) returns (TrainingResponse) {
+  }
+
+  // Saves the trie to a file.
+  rpc SaveTrieToFile(SaveTrieToFileRequest) returns (SaveTrieToFileResponse) {
+  }
+
+  // Loads the trie from a file.
+  rpc LoadTrieFromFile(LoadTrieFromFileRequest)
+      returns (LoadTrieFromFileResponse) {
+  }
+
+  // Updates the trie.
+  rpc UpdateTrie(UpdateTrieRequest) returns (UpdateTrieResponse) {
+  }
+}

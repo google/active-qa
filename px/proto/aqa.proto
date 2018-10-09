@@ -1,0 +1,149 @@
+// Copyright 2018 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+////////////////////////////////////////////////////////////////////////////////
+
+// Protocol buffer for the AQA-Environment I/O. The AQA model sends |Query|s to
+// the environment, and receives in return one |Response| per |Query|. An 'id'
+// field may be used to align |Query|s and |Response|s.
+// |Query|s will contain a question to be answered, and sometimes additional
+// context (e.g. documents). The environment may be a QA system, Search, or
+// another source of information useful for answering questions. The |Response|
+// contains |Observation|s; in the simplest case these would be direct answers
+// to the question, but they may also contain more indirect information, such as
+// snippets, URLs, or even images etc.
+
+syntax = "proto2";
+
+package active_qa;
+
+
+message Context {
+  // A document from which the answer is extracted in tasks such as SQuAD.
+  optional string document = 1;
+  // Tokenized version of the document.
+  repeated string tokenized_document = 2;
+}
+
+message Query {
+  // The question itself.
+  optional string question = 1;
+  // Additional contexts for the question.
+  repeated Context contexts = 2;
+  // An optional identifier string, typically used to identify a particular
+  // datapoint.
+  optional string id = 3;
+  // Debug information to pass though the environment unadalterated.
+  map<string, string> passthrough_debug = 4;
+  // Tokenized version of the question.
+  repeated string tokenized_question = 5;
+  // The original question; may be used for scoring the response.
+  optional string original_question = 6;
+  // Is the question impossible to answer? This is used in SQuAD from
+  // version 2.0.
+  optional bool is_impossible = 7;
+  // If the question is impossible, we store a secondary id. This is the id of
+  // any of the other (answerable) questions from the same passage. This id can
+  // be used to get an answer from an environment trained on SQuAD v 1.x.
+  optional string secondary_id = 8;
+}
+
+message Observation {
+  // The observation text, e.g. an answer.
+  optional string text = 1;
+  // Scores associated with the response, such as confidence, F1, or rank.
+  map<string, float> scores = 2;
+
+  extensions 10000 to max;
+}
+
+message Response {
+  // The input question sent to the environment in Query.
+  optional string question = 1;
+  // A version of the input question processed by the environment.
+  optional string processed_question = 2;
+  // Answers to the question produced by the environment.
+  repeated Observation answers = 3;
+  // Additional context produced by the environment, such as snippets,
+  // documents, or images.
+  map<string, Observation> observations = 4;
+  // An optional identifier.
+  optional string id = 5;
+  // Debug information directly copied from the input queries.
+  map<string, string> passthrough_debug = 6;
+  // The original question.
+  optional string original_question = 7;
+  // For returning per-response error messages.
+  optional string error_message = 8;
+  // Similarity score between the question and original_question.
+  optional double question_original_similarity = 9;
+}
+
+// Request message for the EnvironmentServer.
+message EnvironmentRequest {
+  // The request contains a batch of queries which are handled independently
+  // by the environment.
+  repeated Query queries = 1;
+}
+
+// RPC application error codes.
+enum ErrorCode {
+  NO_ERROR = 0;
+  NO_QUERIES = 1;
+  EMPTY_QUESTION = 2;
+  SCRAPE_FAILED = 3;
+}
+
+// Response message for the EnvironmentServer.
+message EnvironmentResponse {
+  // One response is returned for each Query in EnvironmentRequest.
+  repeated Response responses = 1;
+}
+
+// gRPC service for an environment.
+service EnvironmentServer {
+  rpc GetObservations(EnvironmentRequest) returns (EnvironmentResponse) {
+  }
+}
+
+// Container for corresponding |Query|s and |Response|s.
+message QueryResponse {
+  optional Query query = 1;
+  optional Response response = 2;
+}
+
+// Message to contain all information associated with a datapoint; |Query|s and
+// |Response|s for the original question and rewrites, and additional label
+// information.
+message QAInstance {
+  // An ID for the entire datapoint.
+  optional string id = 1;
+  // Environment input/output for the original question.
+  optional QueryResponse qr_original = 2;
+  // Environment input/output for the rewrites.
+  repeated QueryResponse qr_rewrites = 3;
+  // Ground truth answers.
+  repeated string gold_answers = 4;
+  // For answers extracted directly from |Response|s, the |QueryResponse|
+  // chosen containing the best answer.
+  optional QueryResponse qr_best = 5;
+  // Is the question answerable?
+  optional bool is_impossible = 6;
+  // Human-selected plausible extractive answers.
+  repeated string plausible_answers = 7;
+  // The title (if available) of the article that contains the passages where
+  // the answers are extracted from; e.g., the title of the Wikipedia article
+  // in SQuAD.
+  optional string title = 8;
+}

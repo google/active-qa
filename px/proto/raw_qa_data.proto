@@ -1,0 +1,106 @@
+// Copyright 2018 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+////////////////////////////////////////////////////////////////////////////////
+
+// Protos that mirror the structure of the raw json files for various QA
+// datasets. These are used once only to parse the raw data.
+syntax = "proto2";
+
+package active_qa;
+
+message SquadData {
+  message Data {
+    // Title for the Wikipedia article.
+    optional string title = 1;
+
+    message Paragraph {
+      // The paragraph text.
+      optional string context = 1;
+
+      message QA {
+        message Answer {
+          // Location of the answer in the text.
+          optional int32 answer_start = 1;
+
+          // The answer string.
+          optional string text = 2;
+        }
+
+        // An |QA| may have multiple correct answers extracted from the
+        // paragraph.
+        repeated Answer answers = 1;
+
+        // Human-written question.
+        optional string question = 4;
+
+        // An identifier for the Q/A instance.
+        optional string id = 5;
+
+        // An identifier for the question.
+        optional string qid = 6;
+
+        // Starting with SQuAD v2.0.
+
+        // Is the question answerable?
+        optional bool is_impossible = 7;
+
+        // Human-selected plausible extractive answers.
+        repeated Answer plausible_answers = 8;
+      }
+
+      // A question/answer for the paragraph.
+      repeated QA qas = 3;
+    }
+
+    // Each |Paragraph| is extracted from the article.
+    repeated Paragraph paragraphs = 2;
+  }
+
+  // Each |Data| corresponds to a single Wikipedia article.
+  repeated Data data = 1;
+
+  // Version of the dataset.
+  optional string version = 2;
+}
+
+message MsMarcoData {
+  // Answers.
+  repeated string answers = 1;
+
+  message Passage {
+    // Whether the answer is in the passage.
+    optional bool is_selected = 1;
+
+    // Passage text.
+    optional string passage_text = 2;
+
+    // Website from which the passage comes.
+    optional string url = 3;
+  }
+
+  // Contexts.
+  repeated Passage passages = 2;
+
+  // A unique identifier for the query and datapoint (there is one datapoint per
+  // query).
+  optional int32 query_id = 3;
+
+  // Queries a classified into "numeric", "entity", "location", "person" and
+  // "description".
+  optional string query_type = 4;
+
+  // Query string.
+  optional string query = 5;
+}
