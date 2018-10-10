@@ -5,6 +5,8 @@ This repo contains code for our paper [Ask the Right Questions: Active Question
 Small forewarning, this is still much more of a research codebase than a
 library. No support is provided.
 
+*If you use this code for your research, please [cite the paper](#bibtex).*
+
 ## Introduction
 ActiveQA is an agent that transforms questions online in order to find the best
 answers. The agent consists of a Tensorflow model that reformulates questions
@@ -194,3 +196,23 @@ and uses data from the following sources:
 * [GloVe](https://nlp.stanford.edu/projects/glove/)
 * [SearchQA](https://github.com/nyu-dl/SearchQA)
 
+# BibTex
+
+```
+@inproceedings{buck18,
+  author    = {Christian Buck and
+               Jannis Bulian and
+               Massimiliano Ciaramita and
+               Andrea Gesmundo and
+               Neil Houlsby and
+               Wojciech Gajewski and
+               Wei Wang},
+  title     = {Ask the Right Questions: Active Question Reformulation with Reinforcement
+               Learning},
+  booktitle = {Sixth International Conference on Learning Representations (ICLR)},
+  year      = {2018},
+  month     = {May},
+  address   = {Vancouver, Canada},
+  url       = {https://openreview.net/forum?id=S1CChZ-CZ},
+}
+```
