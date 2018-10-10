@@ -41,7 +41,7 @@ mkdir $DATA_DIR
 
 #### Download
 Download the SearchQA dataset (~600 MB) for training, testing, and validation
-here: https://drive.google.com/open?id=0B51lBZ1gs1XTR3BIVTJQWkREQU0
+here: https://drive.google.com/open?id=1OxRhw81g7amW3aBd_iu2By5THysgr2uv
 
 ```
 <Download the dataset to $DATA_DIR/SearchQA.zip>
