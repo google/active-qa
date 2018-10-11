@@ -26,6 +26,11 @@ import tensorflow as tf
 
 def safe_string(s):
   """Safely converts unicode and plain strings to byte strings."""
+  try:
+    unicode          # Python 2
+  except NameError:
+    rerurn bytes(s)  # Python 3
+  
   if isinstance(s, unicode):
     try:
       s = s.encode('utf-8')
