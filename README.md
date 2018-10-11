@@ -29,6 +29,9 @@ installed separately following the docs. To install the other dependencies use
 pip install -r requirements.txt
 ```
 
+Note: We only ran this code with Python 2, so Python 3 is not officially
+supported.
+
 ### Data
 Download the source dataset from [SearchQA](https://github.com/nyu-dl/SearchQA),
 [GloVe](https://nlp.stanford.edu/projects/glove/), and NLTK corpus and save
