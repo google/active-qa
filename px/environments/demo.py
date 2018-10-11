@@ -36,9 +36,9 @@ import numpy as np
 import px.nmt.environment_client as environment_client
 
 try:
-    raw_input          # Python 2
+  raw_input          # Python 2
 except NameError:
-    raw_input = input  # Python 3
+  raw_input = input  # Python 3
 
 flags.DEFINE_string('server_address', '', 'Address of the environment server.')
 flags.DEFINE_string(
