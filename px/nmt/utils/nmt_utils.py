@@ -122,7 +122,7 @@ def decode_and_evaluate(name,
   for metric in metrics:
     if metric != "f1" and ref_file:
       if not tf.gfile.Exists(trans_file):
-        raise IOException("%s: translation file not found" % trans_file)
+        raise IOError("%s: translation file not found" % trans_file)
       score = evaluation_utils.evaluate(
           ref_file, trans_file, metric, subword_option=subword_option)
       evaluation_scores[metric] = score
