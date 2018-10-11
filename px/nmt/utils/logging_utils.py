@@ -29,7 +29,7 @@ def safe_string(s):
   try:
     unicode          # Python 2
   except NameError:
-    rerurn bytes(s)  # Python 3
+    return bytes(s)  # Python 3
   
   if isinstance(s, unicode):
     try:
