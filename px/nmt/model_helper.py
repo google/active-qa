@@ -467,7 +467,7 @@ def _create_pretrained_emb_from_txt(vocab_file,
                                     num_trainable_tokens=3,
                                     dtype=tf.float32,
                                     scope=None):
-  """Load pretrain embeding from embed_file, and return an embedding matrix.
+  """Load pretrained embedding from embed_file, and return an embedding matrix.
 
   Args:
     embed_file: Path to a Glove formatted embedding txt file.

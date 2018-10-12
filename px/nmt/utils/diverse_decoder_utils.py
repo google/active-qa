@@ -56,7 +56,7 @@ class DiverseBeamSearchDecoder(beam_search_decoder.BeamSearchDecoder):
       decoder_scope: Scope.
       maximum_iterations: int, Maximum number of decoding iterations.
       decoding_iterations: number of sequential beam search decodings.
-      *args: Other argments to apply to the BeamSearchDecoder class.
+      *args: Other arguments to apply to the BeamSearchDecoder class.
       **kwargs: Keyword arguments to apply to the BeamSearchDecoder class.
     """
     super(DiverseBeamSearchDecoder, self).__init__(*args, **kwargs)

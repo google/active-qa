@@ -94,7 +94,7 @@ class DocqaServer(aqa_pb2_grpc.EnvironmentServerServicer):
 
   def _InitializeEnvironment(self, precomputed_data_path, corpus_dir, model_dir,
                              nltk_dir, load_test, debug_mode):
-    """Initilizes the DocQA model environment.
+    """Initializes the DocQA model environment.
 
     Args:
       precomputed_data_path: Path to the precomputed data stored in a pickle

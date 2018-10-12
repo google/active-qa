@@ -17,7 +17,7 @@ import numpy as np
 
 
 def _get_ngrams(n, text):
-  """Calcualtes n-grams.
+  """Calculates n-grams.
 
   Args:
     n: which n-grams to calculate
@@ -127,12 +127,12 @@ def _recon_lcs(x, y):
 def rouge_n(evaluated_sentences, reference_sentences, n=2):
   """
   Computes ROUGE-N of two text collections of sentences.
-  Sourece: http://research.microsoft.com/en-us/um/people/cyl/download/
+  Source: http://research.microsoft.com/en-us/um/people/cyl/download/
   papers/rouge-working-note-v1.3.1.pdf
 
   Args:
     evaluated_sentences: The sentences that have been picked by the summarizer
-    reference_sentences: The sentences from the referene set
+    reference_sentences: The sentences from the reference set
     n: Size of ngram.  Defaults to 2.
 
   Returns:
@@ -212,7 +212,7 @@ def rouge_l_sentence_level(evaluated_sentences, reference_sentences):
 
   Args:
     evaluated_sentences: The sentences that have been picked by the summarizer
-    reference_sentences: The sentences from the referene set
+    reference_sentences: The sentences from the reference set
 
   Returns:
     A float: F_lcs

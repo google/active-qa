@@ -85,12 +85,12 @@ class BidafServer(aqa_pb2_grpc.EnvironmentServerServicer):
 
   def _InitializeEnvironment(self, data_dir, shared_file, model_dir, load_test,
                              load_impossible_questions, debug_mode):
-    """Initilizes the BiDAF model environment.
+    """Initializes the BiDAF model environment.
 
     Args:
       data_dir: Directory containing preprocessed SQuAD data.
       shared_file: Path to shared data generated at training time.
-      model_dir: Directory contining parameters of a pre-trained BiDAF
+      model_dir: Directory containing parameters of a pre-trained BiDAF
                  model.
       load_test: Whether the test set should be loaded as well.
       load_impossible_questions: Whether info about impossibility of questions

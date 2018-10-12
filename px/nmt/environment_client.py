@@ -36,7 +36,7 @@ def multi_call_environment(pool, stub, request, timeouts):
   """Make parallel calls to the environment server.
 
   Args:
-    pool: a ThreadPool instance to performe multiple calls. If None, a single
+    pool: a ThreadPool instance to perform multiple calls. If None, a single
         call will be performed, instead.
     stub: a stub instance
     request: aqa_pb2.EnvironmentRequest instances

@@ -267,7 +267,7 @@ def _correct_searchqa_score(x, dataset):
   elif dataset == 'test':
     return x * 24660 / (24660 + 2588)
   else:
-    raise ValueError('Unexepected value for dataset: {}'.format(dataset))
+    raise ValueError('Unexpected value for dataset: {}'.format(dataset))
 
 
 def main(argv):

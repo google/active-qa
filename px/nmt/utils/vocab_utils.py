@@ -146,7 +146,7 @@ def load_embed_txt(embed_file):
       if emb_size:
         if emb_size != len(vec):
           utils.print_out(
-              "Ignoring %s since embeding size is inconsistent." % word)
+              "Ignoring %s since embedding size is inconsistent." % word)
           del emb_dict[word]
       else:
         emb_size = len(vec)

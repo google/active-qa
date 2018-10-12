@@ -69,7 +69,7 @@ class BidafEnvironment(object):
     Args:
       data_dir: Directory containing preprocessed SQuAD data.
       shared_path: Path to shared data generated at training time.
-      model_dir: Directory contining parameters of a pre-trained BiDAF model.
+      model_dir: Directory containing parameters of a pre-trained BiDAF model.
       docid_separator: Separator used to split suffix off the docid string.
       debug_mode: If true logs additional debug information.
       load_test: Whether the test set should be loaded as well.
