@@ -153,11 +153,6 @@ class Reformulator(object):
                       BEAM_SEARCH] = model_helper.create_infer_model(
                           model_creator, self.hparams, graph=combined_graph)
 
-    self.hparams.infer_mode = "diverse_beam_search"
-    self.hparams.beam_width = max(1, default_beam_width)
-    self.infer_models[reformulator_pb2.ReformulatorRequest
-                      .DIVERSE_BEAM_SEARCH] = model_helper.create_infer_model(
-                          model_creator, self.hparams, graph=combined_graph)
 
     self.hparams.infer_mode = "trie_greedy"
     self.hparams.beam_width = 0
