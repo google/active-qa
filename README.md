@@ -126,6 +126,18 @@ response per query.
    --bidaf_model_dir=data/bidaf/
    ```
 
+The checkpoint of a BiDAF model trained on SearchQA is already provided in
+data/bidaf, so you don't have to train one yourself. However, if you want to
+reproduce our training, clone the
+[BiDAF repository](https://github.com/allenai/bi-att-flow) and run
+```
+python basic/cli.py \
+--mode=trains \
+--data_dir=data/squad \
+--shared_path=data/bidaf/shared.json \
+--init_lr=0.001 \
+--num_steps=14000
+```
 ### Reformulator Training
 
 We first train reformulator from a model pretrained on UN and Paralex datasets.
