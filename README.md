@@ -202,6 +202,12 @@ python -m px.nmt.reformulator_and_selector_training \
 --tensorboard_dir=$OUT_DIR/tensorboard
 ```
 
+Note: If you don't want to wait 2-3 days for the training to finish, you can
+download a [checkpoint of the selector](https://storage.cloud.google.com/pretrained_models/selector.zip).
+The checkpoint is trained on SearchQA, achieving an F1 score of ~47.5 on the dev
+set.
+
+
 ## References
 
 This repository relies on the work of the following repositories:

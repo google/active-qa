@@ -62,6 +62,8 @@ flags.DEFINE_integer('batch_size_eval', 64, 'Batch size for eval.')
 flags.DEFINE_integer('epochs', 1, 'Number of training epochs.')
 flags.DEFINE_integer('num_steps_per_eval', 500,
                      'Number of steps to train for each eval run.')
+flags.DEFINE_integer('steps_per_save_selector', 500,
+                     'Number of steps to save a checkpoint for the selector.')
 flags.DEFINE_string('mode', 'searchqa', 'Which QA dataset to preprocess for.')
 flags.DEFINE_string('hparams_path', None, 'Path to the json hparams file.')
 flags.DEFINE_string(
@@ -313,6 +315,7 @@ def main(argv):
 
   if FLAGS.enable_selector_training:
     selector_model = selector.Selector()
+    last_save_step = 0
 
   global_step = 0
   for epoch in range(FLAGS.epochs):
@@ -416,6 +419,12 @@ def main(argv):
 
         train_selector_loss, train_selector_accuracy = selector_model.train(
             selector_questions, selector_answers, selector_scores)
+
+        # Regularly save a checkpoint.
+        if global_step - last_save_step >= FLAGS.steps_per_save_selector:
+          selector_model.save(str(global_step))
+          last_save_step = global_step
+          print('Selector saved at step: {}'.format(global_step))
 
         if FLAGS.debug:
           print('Train Accuracy: {}'.format(train_selector_accuracy))
